@@ -1,0 +1,50 @@
+version: '3.7'
+services:
+  postgres:
+    image: 'postgres:12.1'
+    container_name: postgres_db_quiz
+    build:
+      context: postgres_db
+    env_file: variables.env
+    ports:
+      - '5403:5403'
+    command: postgres -p 5403 -c shared_buffers=512MB -c effective_cache_size=1536MB -c work_mem=2621kB -c maintenance_work_mem=128MB -c max_connections=1000
+    shm_size: '1gb'
+    restart: on-failure
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_log:/var/log/postgresql
+      - postgres_etc:/etc/postgresql
+
+  web_server_quiz:
+    image: web_server_quiz
+    container_name: web_server_quiz
+    build:
+      context: web_server_quiz
+    env_file:
+      - 'variables.env'
+    restart: on-failure
+    command: python3 wsgi.py
+    # command: tail -f /dev/null
+    depends_on:
+      - "postgres"
+    ports:
+      - '5008:5008'
+    tty: true
+
+  nginx_quiz:
+    image: nginx_quiz
+    container_name: nginx_quiz
+    build:
+      context: nginx
+    ports:
+      - '4445:4445'
+    restart: on-failure
+    depends_on:
+      - "web_server_quiz"
+    command: [nginx, '-g', 'daemon off;']  
+    
+volumes:
+  postgres_data_quiz:
+  postgres_log_quiz:
+  postgres_etc_quiz:
