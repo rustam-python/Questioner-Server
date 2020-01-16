@@ -12,37 +12,37 @@ services:
     shm_size: '1gb'
     restart: on-failure
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - postgres_log:/var/log/postgresql
-      - postgres_etc:/etc/postgresql
+      - postgres_data_quiz:/var/lib/postgresql/data
+      - postgres_log_quiz:/var/log/postgresql
+      - postgres_etc_quiz:/etc/postgresql
 
-  web_server_quiz:
-    image: web_server_quiz
-    container_name: web_server_quiz
-    build:
-      context: web_server_quiz
-    env_file:
-      - 'variables.env'
-    restart: on-failure
-    command: python3 wsgi.py
-    # command: tail -f /dev/null
-    depends_on:
-      - "postgres"
-    ports:
-      - '5008:5008'
-    tty: true
+  # web_server_quiz:
+  #   image: web_server_quiz
+  #   container_name: web_server_quiz
+  #   build:
+  #     context: web_server_quiz
+  #   env_file:
+  #     - 'variables.env'
+  #   restart: on-failure
+  #   command: python3 wsgi.py
+  #   # command: tail -f /dev/null
+  #   depends_on:
+  #     - "postgres"
+  #   ports:
+  #     - '5008:5008'
+  #   tty: true
 
-  nginx_quiz:
-    image: nginx_quiz
-    container_name: nginx_quiz
-    build:
-      context: nginx
-    ports:
-      - '4445:4445'
-    restart: on-failure
-    depends_on:
-      - "web_server_quiz"
-    command: [nginx, '-g', 'daemon off;']  
+  # nginx_quiz:
+  #   image: nginx_quiz
+  #   container_name: nginx_quiz
+  #   build:
+  #     context: nginx
+  #   ports:
+  #     - '4445:4445'
+  #   restart: on-failure
+  #   depends_on:
+  #     - "web_server_quiz"
+  #   command: [nginx, '-g', 'daemon off;']  
     
 volumes:
   postgres_data_quiz:

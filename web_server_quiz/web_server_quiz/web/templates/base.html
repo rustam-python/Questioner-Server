@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    {% block styles %}
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" type="text/css"
+              href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/alertify/alertify.min.css') }}">
+        <link rel="stylesheet" type="text/css"
+              href="{{ url_for('static', filename='css/alertify/themes/bootstrap.css') }}">
+
+    {% endblock %}
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename = 'favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename = 'favicon.ico') }}" type="image/x-icon">
+    <title>Quiz Web Server</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-light shadow-sm">
+    <img src="../static/yadro_logo.png" width="50" height="50" class="d-inline-block align-top" alt="">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar6">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse justify-content-stretch" id="navbar6">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/index">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/quiz_creation">Create a new quiz</a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-item nav-link"
+                       href="{{ url_for('frontend.logged_user') }}">{{ current_user.username }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-danger" href="{{ url_for('frontend.logout') }}">Logout</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+{% block content %}
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/jquery/jquery-3.4.1.slim.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/popper/popper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/alertify/alertify.js') }}"></script>
+    <script type="text/javascript">
+        function callSuccessAlertify(data) {
+            let message = extractMessage(data);
+            if (message !== null) {
+                alertify.success(message, '60');
+            }
+        }
+
+        function callFailureAlertify(data) {
+            let message = extractMessage(data);
+            if (message !== null) {
+                alertify.error(message, '-1');
+            }
+        }
+
+        function extractMessage(data) {
+            if (data.hasOwnProperty('message')) {
+                return data.message;
+            } else {
+                if (data.hasOwnProperty('responseJSON')) {
+                    if (data.responseJSON.hasOwnProperty('message')) {
+                        return data.responseJSON.message;
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            }
+        }
+    </script>
+
+{% endblock %}
+
+</body>
+</html>
