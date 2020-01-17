@@ -1,12 +1,11 @@
 import hashlib
-import json
 
-from flask import render_template, flash, redirect, url_for, request, Blueprint, escape
+from flask import render_template, flash, redirect, url_for, request, Blueprint
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 
-from models import User, Sessions
 import web.forms as forms
+from models import User, QuizQuestions, Choices
 
 frontend = Blueprint('frontend', __name__)
 
