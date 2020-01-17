@@ -1,3 +1,5 @@
+os:
+  - linux
 language: python
 python:
   - "3.7"
@@ -16,12 +18,12 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 
-before_script:
-  - docker-compose up -d --build
+# before_script:
+#   - docker-compose up -d --build
 
-# TODO
-# script:
-#   - docker-compose exec web_server_quiz coverage run -m unittest discover
+
+script:
+  - docker-compose up -d --build
 
 after_script:
   - docker-compose down
