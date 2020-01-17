@@ -8,8 +8,7 @@ services:
     env_file: variables.env
     ports:
       - '5403:5403'
-    command: postgres -p 5403 -c shared_buffers=512MB -c effective_cache_size=1536MB -c work_mem=2621kB -c maintenance_work_mem=128MB -c max_connections=1000
-    shm_size: '1gb'
+    command: postgres -p 5403
     restart: on-failure
     volumes:
       - postgres_data_quiz:/var/lib/postgresql/data
