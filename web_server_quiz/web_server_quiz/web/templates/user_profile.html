@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block styles -%}
+    {{ super() }}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container">
+                    <div class=flashes>
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+
+        <div class="container py-2">
+            <h3>User: {{ user.username }}</h3>
+        </div>
+        <hr>
+        <div class="container py-2">
+            <ul class="list-group">
+                <li class="list-group-item">Email: {{ user.email }}</li>
+                <li class="list-group-item">Age: {{ user.age }}</li>
+                <li class="list-group-item">Gender: {{ user.gender }}</li>
+                <li class="list-group-item">Religion: {{ user.religion }}</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
