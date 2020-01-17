@@ -8,12 +8,13 @@
 
 {% block scripts %}
     {{ super() }}
-    <script type="text/javascript" src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/jqueryserializeJSON/jquery.serializeJSON.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/quiz.js') }}"></script>
 
 {% endblock %}
 
 {% block content %}
-
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -30,5 +31,29 @@
             </div>
         {% endif %}
     {% endwith %}
+
+    <div class="container py-5">
+        <div class="container">
+        <form id="quiz_form" method="post" role="form" action="/quiz">
+            <ul class="list-group">
+                {% set count = namespace(value=0) %}
+                {% for key, values in result_dict.items() %}
+                    <p class="font-weight-light">
+                        {{ key }}
+                    </p>
+                    {% for value in values %}
+                        <li class="list-group-item"><input id="{{ value['id']  }}" name="{{ count.value }}"
+                                                           required type="radio"
+                                                           value="{{value['id'] }}">
+                            <label for="{{ value['id'] }}">{{ value['text'] }}</label></li>
+                    {% endfor %}
+                    <br>
+                    {% set count.value = count.value + 4 %}
+                {% endfor %}
+            </ul>
+        </form>
+        <button class="btn btn-success" onclick="sendData()">Get Result!</button>
+        </div>
+    </div>
 
 {% endblock %}
