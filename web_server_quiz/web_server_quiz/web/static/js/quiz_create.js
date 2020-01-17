@@ -33,7 +33,6 @@ function addQuestion() {
 
 function sendData() {
     let data = $("#quiz_form").serializeJSON();
-    console.log(data);
     let api_endpoint = 'http://' + document.domain + ':' + location.port + '/api/quiz_create';
     $.ajax(
         {
@@ -44,7 +43,6 @@ function sendData() {
             async: false,
             dataType: 'json',
             success: function (response) {
-                console.log(response);
                 if (response['message'] === 'no data'){
                     callFailureAlertify({"message": "Some fields are empty!"});
                 }
