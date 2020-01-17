@@ -3,11 +3,9 @@ import os
 from flask import Flask
 from flask_cors import CORS
 from flask_login import LoginManager
-# from flask_admin import Admin
-# from flask_admin.contrib.peewee import ModelView
 
 import log_tools
-from models import User, QuizNames, QuizQuestions, Choices
+from models import User
 from .api import api
 from .blueprints import frontend
 from .namespaces import *
@@ -35,15 +33,10 @@ def create_app() -> Flask:
 
     app.register_blueprint(frontend)
 
-    # admin = Admin(app)
-    # admin.add_view(ModelView(QuizNames))
-    # admin.add_view(ModelView(QuizQuestions))
-    # admin.add_view(ModelView(Choices))
-
     api.init_app(app)
     api.add_namespace(user_validation)
     api.add_namespace(quiz_create)
-    api.add_namespace(quiz_get_quiz_list)
+    api.add_namespace(quiz_get_quiz_data)
 
     login.init_app(app)
     login.login_view = 'frontend.login'
