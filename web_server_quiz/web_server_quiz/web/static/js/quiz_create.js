@@ -46,6 +46,7 @@ function sendData() {
                 if (response['message'] === 'no data'){
                     callFailureAlertify({"message": "Some fields are empty!"});
                 }
+                window.location.href = 'http://' + document.domain + ':' + location.port + '/quiz_creation';
             },
             error: function (data) {
                 callFailureAlertify(data);
