@@ -78,4 +78,21 @@ def logged_user():
 @frontend.route('/quiz/<quiz_id>', methods=['GET', 'POST'])
 @login_required
 def quiz(quiz_id: int):
-    return render_template('quiz.html', title='Quiz')
+    quiz_list = [quiz_data for quiz_data in
+                 QuizQuestions.select(QuizQuestions.question_text, Choices.id, Choices.choice_text).dicts().
+                     join(Choices).group_by(Choices.choice_text, QuizQuestions.question_text, Choices.id).where(
+                     QuizQuestions.quiz_id == quiz_id)]
+    result_dict = {}
+    for question in quiz_list:
+        if question['question_text'] not in result_dict:
+            result_dict[question['question_text']] = []
+    for question in quiz_list:
+        result_dict[question['question_text']].append({'text': question['choice_text'], 'id': question['id']})
+    return render_template('quiz.html', title='Quiz', result_dict=result_dict)
+
+
+@frontend.route('/user_profile/<username>', methods=['GET', 'POST'])
+@login_required
+def user_profile(username: str):
+    user = User.get(User.username == username)
+    return render_template('user_profile.html', title='User Profile', user=user)
