@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    let api_endpoint = 'http://' + document.domain + ':' + location.port + '/api/get_quiz_list';
+    let api_endpoint = 'http://' + document.domain + ':' + location.port + '/api/get_quiz/quiz_list';
     $.ajax(
         {
             url: api_endpoint,
@@ -8,7 +8,6 @@ $(document).ready(function () {
             success: function (response) {
                 console.log(response);
                 for (let i = 0; i < response.length; i++) {
-                    console.log(response[i]['quiz_name']);
                     let div = document.createElement("div");
                     document.getElementById('quiz_list').appendChild(div);
                     div.innerHTML =
