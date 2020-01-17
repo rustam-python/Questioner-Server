@@ -37,7 +37,7 @@ services:
     build:
       context: nginx
     ports:
-      - '4445:4445'
+      - '4446:4446'
     restart: on-failure
     depends_on:
       - "web_server_quiz"
