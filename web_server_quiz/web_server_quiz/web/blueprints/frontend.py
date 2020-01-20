@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 
 import web.forms as forms
-from models import User, QuizQuestions, Choices
+from models import User, QuizQuestions
 
 frontend = Blueprint('frontend', __name__)
 
@@ -16,15 +16,19 @@ def login():
         return redirect(url_for('index'))
     form = forms.LoginForm(request.form)
     if form.validate():
-        user = User.get(User.username == form.username.data)
-        if user is None or user.password_hash != hashlib.sha256(form.password.data.encode('UTF-8')).hexdigest():
+        try:
+            user = User.get(User.username == form.username.data)
+            if user is None or user.password_hash != hashlib.sha256(form.password.data.encode('UTF-8')).hexdigest():
+                flash('Invalid username or password')
+                return redirect(url_for('frontend.login'))
+            login_user(user)
+            next_page = request.args.get('next')
+            if not next_page or url_parse(next_page).netloc != '':
+                next_page = url_for('frontend.index')
+            return redirect(next_page)
+        except User.DoesNotExist:
             flash('Invalid username or password')
             return redirect(url_for('frontend.login'))
-        login_user(user)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('frontend.index')
-        return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
 
